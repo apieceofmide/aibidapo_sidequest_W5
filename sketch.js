@@ -26,6 +26,12 @@ let level;
 let player;
 let cam;
 
+const clouds = [
+  { x: 400, y: 60, size: 40 },
+  { x: 1100, y: 80, size: 50 },
+  { x: 1800, y: 50, size: 35 },
+];
+
 function preload() {
   allLevelsData = loadJSON("levels.json"); // levels.json beside index.html [web:122]
 }
@@ -50,6 +56,18 @@ function loadLevel(i) {
   cam.clampToWorld(level.w, level.h);
 }
 
+function drawClouds() {
+  noStroke();
+  fill(250, 239, 241); //changed to pastel pink
+  for (const c of clouds) {
+    const sx = c.x - cam.x * 0.3;
+    const sy = c.y;
+    ellipse(sx, sy, c.size * 2, c.size * 1.4);
+    ellipse(sx + c.size, sy + c.size * 0.2, c.size * 1.6, c.size * 1.2);
+    ellipse(sx - c.size, sy + c.size * 0.2, c.size * 1.4, c.size * 1.2);
+  }
+}
+
 function draw() {
   // --- game state ---
   player.update(level);
@@ -62,14 +80,15 @@ function draw() {
 
   // --- view state (data-driven smoothing) ---
   cam.followSideScrollerX(player.x, level.camLerp);
-  cam.y = 0;
-  cam.clampToWorld(level.w, level.h);
+  cam.y = 4 * sin(0.02 * frameCount); //changed how the y value works
+  cam.clampToWorld(level.w, Infinity); //updated so the y of teh camera can fluctuate freely
 
   // --- draw ---
   cam.begin();
   level.drawWorld();
   player.draw(level.theme.blob);
   cam.end();
+  drawClouds(); // add this line here
 
   // HUD
   fill(0);

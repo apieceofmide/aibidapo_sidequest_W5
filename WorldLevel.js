@@ -3,7 +3,7 @@ class WorldLevel {
     this.name = levelJson.name ?? "Level";
 
     this.theme = Object.assign(
-      { bg: "#F0F0F0", platform: "#C8C8C8", blob: "#1478FF" },
+      { bg: "#D5E2EC", platform: "#805D93", blob: "#1478FF" }, //updated colours
       levelJson.theme ?? {},
     );
 
@@ -28,14 +28,14 @@ class WorldLevel {
     );
   }
 
-drawWorld() {
-  background(this.theme.bg);
-  push();
-  rectMode(CORNER);          // critical: undo any global rectMode(CENTER) [web:230]
-  noStroke();
-  fill(this.theme.platform);
+  drawWorld() {
+    background(this.theme.bg);
+    push();
+    rectMode(CORNER); // critical: undo any global rectMode(CENTER) [web:230]
+    noStroke();
+    fill(this.theme.platform);
 
-  for (const p of this.platforms) rect(p.x, p.y, p.w, p.h); // x,y = top-left [web:234]
-  pop();
-}
+    for (const p of this.platforms) rect(p.x, p.y, p.w, p.h); // x,y = top-left [web:234]
+    pop();
+  }
 }
